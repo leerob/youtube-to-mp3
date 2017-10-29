@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-const { ipcRenderer } = window.require('electron')
 import LinkInput from '../components/LinkInput';
 import ProgressBar from '../components/ProgressBar';
 
+const { ipcRenderer } = window.require('electron')
 
 
 class AppContainer extends Component {
