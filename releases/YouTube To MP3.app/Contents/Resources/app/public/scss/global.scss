@@ -1,0 +1,95 @@
+$green: #80f9b7;
+$blue: #9abdeb;
+$pink: #fa7fc3;
+$grey: #747373;
+$shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
+$font-size: 22px;
+$font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: $font-family;
+    background: linear-gradient(135deg, $green 0%, $blue 100%);
+}
+
+.root {
+    height: 100%;
+    align-items: center;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.progress {
+    width: 510px;
+    box-shadow: $shadow;
+    background-color: white;
+    height: 60px;
+    border-radius: 10px;
+
+    &__bar {
+        background-color: $pink;
+        display: inline-block;
+        height: 100%;
+        border-radius: 10px;
+        transition: width .4s ease-in-out;
+    }
+    &__percentage {
+        font-size: $font-size;
+        font-weight: 200;
+        transition: color .4s ease-in-out;
+        position: absolute;
+        top: calc(50% - 42px);
+        left: calc(50% + 195px);
+    }
+    &__info {
+        height: 50px;
+        text-shadow: $shadow;
+        color: white;
+        font-size: $font-size;
+        margin-top: 10px;
+        font-weight: 200;
+    }
+}
+
+.link {
+    &__input {
+      width: 510px;
+      height: 60px;
+      border: 0;
+      border-radius: 10px;
+      box-shadow: $shadow;
+      color: $grey;
+      font-size: $font-size;
+      text-indent: 15px;
+      font-weight: 200;
+
+      &--error {
+          @extend .link__input;
+          box-shadow: 0 0 0 2pt rgba(255, 0, 0, 0.53);
+      }
+  }
+
+  &__button {
+      height: 50px;
+      width: 200px;
+      box-shadow: $shadow;
+      border: 0;
+      border-radius: 10px;
+      color: white;
+      font-size: $font-size;
+      background: $pink;
+      margin-top: 10px;
+      font-weight: 200;
+      cursor: pointer;
+  }
+}
