@@ -3,15 +3,14 @@
   <br>
   YouTube To MP3
   <br>
+  <br>
+  <a href="https://www.leejamesrobinson.com"><img src="https://raw.githubusercontent.com/leerob/youtube-to-mp3/master/public/img/example.gif" alt="Youtube To MP3" width="600"></a>
 </h1>
 
 ### About
 
 YouTube To MP3 is a desktop application for converting and downloading YouTube videos to MP3.
 
-### Example
-
-![YouTube To Mp3](https://raw.githubusercontent.com/leerob/youtube-to-mp3/master/public/img/example.gif)
 
 ### Stack
  - [Electron](https://github.com/electron/electron) - Cross platform framework for native platforms
