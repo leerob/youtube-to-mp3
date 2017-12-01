@@ -1,7 +1,7 @@
 {
   "name": "youtube-to-mp3",
   "productName": "YouTube To MP3",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "Electron application to convert and download YouTube videos as MP3s",
   "author": "Lee Robinson",
   "license": "MIT",

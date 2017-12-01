@@ -3,7 +3,7 @@ import Axios from 'axios';
 import LinkInput from '../components/LinkInput';
 import ProgressBar from '../components/ProgressBar';
 
-const { ipcRenderer } = window.require('electron')
+const { ipcRenderer } = window.require('electron');
 
 
 class AppContainer extends Component {
