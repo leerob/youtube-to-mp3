@@ -1,13 +1,8 @@
-'use strict';
+const {app, BrowserWindow, ipcMain, Menu} = require('electron');
 
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-const Menu = electron.Menu;
-const ipcMain = electron.ipcMain;
 const path = require('path');
 
-require('electron-reload')(__dirname + '/public');
+//require('electron-reload')(__dirname + '/public');
 
 let mainWindow;
 
@@ -17,7 +12,7 @@ function createWindow() {
     height: 600,
     maximizeable: false,
     icon: path.join(__dirname, '/public/img/logo.png')
-  }
+  };
 
   mainWindow = new BrowserWindow(browserOptions);
   mainWindow.loadURL('file://' + __dirname + '/index.html');
@@ -25,7 +20,7 @@ function createWindow() {
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
 
-  var template = [{
+  let template = [{
     label: "YouTube To MP3",
     submenu: [
       { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
@@ -42,6 +37,11 @@ function createWindow() {
       { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
       { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" }
     ]
+  }, {
+    label: 'Dev Options',
+      submenu: [
+          {label: 'Open Dev Tools', click: () => {mainWindow.webContents.openDevTools()}}
+      ]
   }
   ];
 

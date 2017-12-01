@@ -15,7 +15,7 @@ class AppContainer extends Component {
     };
 
     this.interval = null;
-    this.api_key = '5a142a55461d5fef016acfb927fee0bd';
+    this.api_key = 'yt-mp3.com';
     this.fetchVideo = this.fetchVideo.bind(this);
     this.startDownload = this.startDownload.bind(this);
     this.updateProgress = this.updateProgress.bind(this);
