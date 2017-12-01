@@ -1,8 +1,0 @@
-node_modules
-package-lock.json
-coverage
-build
-.DS_Store
-.env
-.idea
-npm-debug.log
