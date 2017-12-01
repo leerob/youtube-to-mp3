@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 class ProgressBar extends Component {
   render() {
     let percentComplete = `${this.props.progress}%`;
+    let messageToShow = `${this.props.messageText}`;
     let color = '#747373';
 
     if (this.props.progress > 90) {
@@ -15,7 +16,7 @@ class ProgressBar extends Component {
         <div className='progress__percentage' style={{ 'color': color }}>{percentComplete}</div>
       </div>
       <div className='center'>
-        <span className='progress__info'>The video is currently being processed.</span>
+        <span className='progress__info'>{messageToShow}</span>
       </div>
     </div>;
   }

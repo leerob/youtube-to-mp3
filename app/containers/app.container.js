@@ -5,13 +5,13 @@ import ProgressBar from '../components/ProgressBar';
 
 const { ipcRenderer } = window.require('electron');
 
-
 class AppContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showProgressBar: false,
-      progress: 0
+      progress: 0,
+        progressMessage: 'Sending request..',
     };
 
     this.interval = null;
@@ -26,34 +26,31 @@ class AppContainer extends Component {
   startDownload(id) {
     this.setState({
       progress: 0,
-      showProgressBar: true
+      showProgressBar: true,
+        progressMessage: 'Sending request...',
     });
-
-    // Start incrementing the progress bar
-    this.interval = setInterval(
-      () => this.updateProgress(),
-      300
-    );
-
     this.fetchVideo(id);
   }
 
   fetchVideo(id) {
     let _this = this;
-    Axios.get(`http://www.yt-mp3.com/fetch?v=${id}&apikey=${this.api_key}`)
-      .then(function (response) {
-        console.log(response);
-        if (response.data.status === 'timeout') {
-          _this.retryDownload(id);
-        } else if (response.data.url) {
-          _this.downloadFinished(response.data.url);
+    Axios.get(`http://www.yt-mp3.com/fetch?v=${id}&apikey=${this.api_key}`).then(function(response) {
+        if (response.data.status.localeCompare('timeout') === 0) {
+            _this.setState({progressMessage: 'Waiting on yt-mp3 worker...'});
+            _this.retryDownload(id);
+        } else if(response.data.url) {
+            _this.updateProgress(100);
+            _this.setState({progressMessage: 'Conversion complete!'});
+            _this.downloadFinished(response.data.url);
         } else {
-          _this.retryDownload(id);
+            _this.setState({progressMessage: 'Converting video...'});
+            _this.updateProgress(response.data.progress);
+            _this.retryDownload(id);
         }
-      })
-      .catch(function (err) {
+    }).catch((e) => {
+        console.error(e);
         alert('There was an error retrieving the video. Please restart the application.');
-      });
+    });
   }
 
   // The video has been placed in a queue, retry in 5 seconds
@@ -76,25 +73,22 @@ class AppContainer extends Component {
     clearInterval(this.interval);
 
     // Reset the progress bar to the LinkInput
-    setTimeout(
-      () => this.setState({
+    setTimeout(() => this.setState({
         showProgressBar: false
-      }),
-      1000
-    );
+    }), 1000);
   }
 
-  updateProgress() {
-    if (this.state.progress < 100) {
+  updateProgress(progress) {
+    if (this.state.progress <= 100) {
       this.setState({
-        progress: this.state.progress + 1
+        progress: Math.floor(progress)
       });
     }
   }
 
   render() {
     if (this.state.showProgressBar) {
-      return <ProgressBar progress={this.state.progress} />;
+      return <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage} />;
     } else {
       return <LinkInput startDownload={this.startDownload} />;
     }
