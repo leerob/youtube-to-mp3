@@ -1,6 +1,3 @@
-### Disclaimer
-This tool should only be used on videos you have express permission to download in any form, such as your own content.
-
 <h1 align="center">
   <a href="https://www.leejamesrobinson.com"><img src="https://raw.githubusercontent.com/leerob/youtube-to-mp3/master/public/img/logo.png" alt="Youtube To MP3" width="200"></a>
   <br>
@@ -47,3 +44,7 @@ npm install
 # Run the app
 npm start
 ```
+
+### Disclaimer
+This program should only be used on non-copyrighted material.
+

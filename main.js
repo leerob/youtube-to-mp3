@@ -2,8 +2,9 @@ const {app, BrowserWindow, ipcMain, Menu} = require('electron');
 const isDevMode = require('electron-is-dev');
 const path = require('path');
 
-if (isDevMode)
+if (isDevMode) {
     require('electron-reload')(__dirname + '/public');
+}
 
 let mainWindow;
 
@@ -17,9 +18,6 @@ function createWindow(){
 
     mainWindow = new BrowserWindow(browserOptions);
     mainWindow.loadURL('file://' + __dirname + '/index.html');
-
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools();
 
     let template = [{
         label: "YouTube To MP3",
@@ -44,7 +42,7 @@ function createWindow(){
         ]
     }];
 
-    //if developing add dev menu option to menu bar
+    //If developing add dev menu option to menu bar
     if (isDevMode)
         template.push({
             label: 'Dev Options',
