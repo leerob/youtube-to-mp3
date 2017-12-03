@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 class LinkInput extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class LinkInput extends Component {
     let id = '';
     let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     let match = url.match(regExp);
-  
+
     if (match && match[2].length == 11) {
       return match[2];
     } else {
@@ -46,7 +46,8 @@ class LinkInput extends Component {
   render() {
     let className = `link__input${this.state.showError ? '--error' : ''}`;
     return <div>
-      <input className={className} onChange={this.updateInputValue} placeholder='https://www.youtube.com/watch?v=zmXUWKwxDg4' />
+      <input className={className} onChange={this.updateInputValue}
+             placeholder='https://www.youtube.com/watch?v=zmXUWKwxDg4'/>
       <div className='center'>
         <button className='link__button' onClick={this.startDownload}>Convert to .mp3</button>
       </div>

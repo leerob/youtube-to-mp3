@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Axios from 'axios';
 import LinkInput from '../components/LinkInput';
 import ProgressBar from '../components/ProgressBar';
 
-const { ipcRenderer } = window.require('electron');
+const {ipcRenderer} = window.require('electron');
 
 class AppContainer extends Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class AppContainer extends Component {
     this.state = {
       showProgressBar: false,
       progress: 0,
-        progressMessage: 'Sending request..',
+      progressMessage: 'Sending request..',
     };
 
     this.interval = null;
@@ -27,29 +27,29 @@ class AppContainer extends Component {
     this.setState({
       progress: 0,
       showProgressBar: true,
-        progressMessage: 'Sending request...',
+      progressMessage: 'Sending request...',
     });
     this.fetchVideo(id);
   }
 
   fetchVideo(id) {
     let _this = this;
-    Axios.get(`http://www.yt-mp3.com/fetch?v=${id}&apikey=${this.api_key}`).then(function(response) {
-        if (response.data.status.localeCompare('timeout') === 0) {
-            _this.setState({progressMessage: 'Waiting on yt-mp3 worker...'});
-            _this.retryDownload(id);
-        } else if(response.data.url) {
-            _this.updateProgress(100);
-            _this.setState({progressMessage: 'Conversion complete!'});
-            _this.downloadFinished(response.data.url);
-        } else {
-            _this.setState({progressMessage: 'Converting video...'});
-            _this.updateProgress(response.data.progress);
-            _this.retryDownload(id);
-        }
+    Axios.get(`http://www.yt-mp3.com/fetch?v=${id}&apikey=${this.api_key}`).then(function (response) {
+      if (response.data.status.localeCompare('timeout') === 0) {
+        _this.setState({progressMessage: 'Waiting on yt-mp3 worker...'});
+        _this.retryDownload(id);
+      } else if (response.data.url) {
+        _this.updateProgress(100);
+        _this.setState({progressMessage: 'Conversion complete!'});
+        _this.downloadFinished(response.data.url);
+      } else {
+        _this.setState({progressMessage: 'Converting video...'});
+        _this.updateProgress(response.data.progress);
+        _this.retryDownload(id);
+      }
     }).catch((e) => {
-        console.error(e);
-        alert('There was an error retrieving the video. Please restart the application.');
+      console.error(e);
+      alert('There was an error retrieving the video. Please restart the application.');
     });
   }
 
@@ -74,7 +74,7 @@ class AppContainer extends Component {
 
     // Reset the progress bar to the LinkInput
     setTimeout(() => this.setState({
-        showProgressBar: false
+      showProgressBar: false
     }), 1000);
   }
 
@@ -88,9 +88,9 @@ class AppContainer extends Component {
 
   render() {
     if (this.state.showProgressBar) {
-      return <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage} />;
+      return <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage}/>;
     } else {
-      return <LinkInput startDownload={this.startDownload} />;
+      return <LinkInput startDownload={this.startDownload}/>;
     }
   }
 }

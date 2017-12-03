@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 class ProgressBar extends Component {
   render() {
@@ -12,8 +12,8 @@ class ProgressBar extends Component {
 
     return <div>
       <div className='progress'>
-        <div className='progress__bar' style={{ 'width': percentComplete }}></div>
-        <div className='progress__percentage' style={{ 'color': color }}>{percentComplete}</div>
+        <div className='progress__bar' style={{'width': percentComplete}}></div>
+        <div className='progress__percentage' style={{'color': color}}>{percentComplete}</div>
       </div>
       <div className='center'>
         <span className='progress__info'>{messageToShow}</span>
