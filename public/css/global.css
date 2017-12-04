@@ -34,8 +34,10 @@ body {
     font-weight: 200;
     transition: color .4s ease-in-out;
     position: absolute;
+    text-align: right;
+    width: 80px;
     top: calc(50% - 42px);
-    left: calc(50% + 195px); }
+    left: calc(50% + 165px); }
   .progress__info {
     height: 50px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
