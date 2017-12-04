@@ -44,3 +44,7 @@ npm install
 # Run the app
 npm start
 ```
+
+### Disclaimer
+This program should only be used on non-copyrighted material.
+

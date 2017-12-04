@@ -1,13 +1,10 @@
-'use strict';
-
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-const Menu = electron.Menu;
-const ipcMain = electron.ipcMain;
+const {app, BrowserWindow, ipcMain, Menu} = require('electron');
+const isDevMode = require('electron-is-dev');
 const path = require('path');
 
-require('electron-reload')(__dirname + '/public');
+if (isDevMode) {
+  require('electron-reload')(__dirname + '/public');
+}
 
 let mainWindow;
 
@@ -17,33 +14,45 @@ function createWindow() {
     height: 600,
     maximizeable: false,
     icon: path.join(__dirname, '/public/img/logo.png')
-  }
+  };
 
   mainWindow = new BrowserWindow(browserOptions);
   mainWindow.loadURL('file://' + __dirname + '/index.html');
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
-
-  var template = [{
+  let template = [{
     label: "YouTube To MP3",
     submenu: [
-      { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
-      { type: "separator" },
-      { label: "Quit", accelerator: "Command+Q", click: function () { app.quit(); } }
+      {label: "About Application", selector: "orderFrontStandardAboutPanel:"},
+      {type: "separator"},
+      {
+        label: "Quit", accelerator: "Command+Q", click: function () {
+          app.quit();
+        }
+      }
     ]
   }, {
     label: "Edit",
     submenu: [
-      { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-      { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-      { type: "separator" },
-      { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-      { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-      { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" }
+      {label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:"},
+      {label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:"},
+      {type: "separator"},
+      {label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:"},
+      {label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:"},
+      {label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:"}
     ]
-  }
-  ];
+  }];
+  // If developing add dev menu option to menu bar
+  if (isDevMode)
+    template.push({
+      label: 'Dev Options',
+      submenu: [
+        {
+          label: 'Open Dev Tools', click: () => {
+            mainWindow.webContents.openDevTools()
+          }
+        }
+      ]
+    });
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
