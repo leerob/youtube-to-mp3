@@ -71,3 +71,21 @@ body {
   margin-top: 10px;
   font-weight: 200;
   cursor: pointer; }
+
+.outputFolderDisplay {
+  position: absolute;
+  left: 3px;
+  bottom: 1px;
+  font-size: 10pt;
+  color: rgba(55,55,55,0.7)
+}
+
+.outputFolderDisplay span:last-child{
+  font-style: italic;
+  font-weight: normal;
+}
+
+.outputFolderDisplay span:first-child {
+  font-weight: bold;
+  font-style: normal;
+}

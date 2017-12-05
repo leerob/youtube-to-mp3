@@ -104,7 +104,7 @@ class AppContainer extends Component {
     this.setState({
       progress: 0,
       showProgressBar: true,
-      progressMessage: 'Where do you want to store the mp3?',
+      progressMessage: '...',
     });
     try {
         await this.convertVideoToMp3(id, this.state.userDownloadsFolder);
@@ -127,9 +127,19 @@ class AppContainer extends Component {
 
   render() {
     if (this.state.showProgressBar) {
-      return <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage}/>;
+      return (
+        <div>
+          <div className="outputFolderDisplay"><span>Current output folder:&nbsp;</span>{this.state.userDownloadsFolder}</div>
+          <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage}/>
+        </div>
+      );
     } else {
-      return <LinkInput startDownload={this.startDownload}/>;
+      return (
+        <div>
+          <div className="outputFolderDisplay"><span>Current output folder:&nbsp;</span>{this.state.userDownloadsFolder}</div>
+          <LinkInput startDownload={this.startDownload}/>
+        </div>
+      );
     }
   }
 }

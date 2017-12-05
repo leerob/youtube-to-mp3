@@ -95,3 +95,11 @@ body {
       cursor: pointer;
   }
 }
+
+.outputFolderDisplay {
+  span {
+    font-weight: bold;
+    font-style: normal;
+  }
+  font-style: italic;
+}
