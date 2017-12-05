@@ -3,8 +3,12 @@ import LinkInput from '../components/LinkInput';
 import ProgressBar from '../components/ProgressBar';
 
 const ytdl = window.require('ytdl-core');
-const fs = window.require('fs');
+const fs = window.require('fs-extra');
 import * as path from 'path';
+
+const ffmpeg = window.require('fluent-ffmpeg');
+const binaries = window.require('ffmpeg-binaries');
+const sanitize = window.require('sanitize-filename');
 
 const {remote} = window.require('electron');
 
@@ -15,43 +19,82 @@ class AppContainer extends Component {
       showProgressBar: false,
       progress: 0,
       progressMessage: '',
+      userDownloadsFolder: remote.app.getPath('downloads'),
     };
 
-    this.rateLimitTrigged = false;
+    this.rateLimitTriggered = false;
     this.startDownload = this.startDownload.bind(this);
-    this.retryDownload = this.retryDownload.bind(this);
     this.downloadFinished = this.downloadFinished.bind(this);
   }
 
-  getVideoAndConvert(urlLink, userProvidedPath, title){
-    this.setState({progressMessage: 'Downloading and converting...'});
+  getVideoAsMp4(urlLink, userProvidedPath, title){
+    this.setState({progressMessage: 'Downloading...'});
     return new Promise((resolve, reject) => {
-      let fullPath = path.join(userProvidedPath, `${title}.mp4`);
+      let fullPath = path.join(userProvidedPath, `tmp_${title}.mp4`);
       let videoObject = ytdl(urlLink, {filter: 'audioonly'});
 
       videoObject
         .on('progress', (chunkLength, downloaded, total) => {
-          if(!this.rateLimitTrigged) {
+          if(!this.rateLimitTriggered) {
             let newVal = Math.floor((downloaded / total) * 100).toString();
             this.setState({progress: newVal});
-            this.rateLimitTrigged = true;
-            setTimeout(()=>{this.rateLimitTrigged = false}, 800);
+            this.rateLimitTriggered = true;
+            setTimeout(()=>{this.rateLimitTriggered = false}, 800);
           }
         });
 
       videoObject
         .pipe(fs.createWriteStream(fullPath))
         .on('finish', () => {
-          resolve();
+          this.setState({progress: 100});
+          setTimeout(()=>{
+            resolve({filePath: fullPath, folderPath: userProvidedPath, fileTitle: `${title}.mp3`});
+          }, 1000);
         });
     });
+  }
+
+  convertMp4ToMp3(paths) {
+    this.setState({progressMessage: 'Converting...', progress: 0});
+    return new Promise((resolve, reject) => {
+      this.rateLimitTriggered = false;
+      ffmpeg(paths.filePath)
+        .setFfmpegPath(binaries.ffmpegPath())
+        .format('mp3')
+        .on('progress', (progress) => {
+          if (!this.rateLimitTriggered) {
+            this.setState({progress: Math.floor(progress.percent)});
+            this.rateLimitTriggered = true;
+            setTimeout(() => {
+              this.rateLimitTriggered = false
+            }, 800);
+          }
+        })
+        .output(fs.createWriteStream(path.join(paths.folderPath, sanitize(paths.fileTitle))))
+        .on('end', () => {
+          this.setState({progress: 99});
+          resolve();
+        })
+        .run();
+    });
+
   }
 
   async convertVideoToMp3(urlLink, userProvidedPath) {
     try{
       this.setState({progressMessage: 'Fetching video info...'});
       let info = await ytdl.getInfo(urlLink);
-      await this.getVideoAndConvert(urlLink, userProvidedPath, info.title);
+      let paths = await this.getVideoAsMp4(urlLink, userProvidedPath, info.title);
+      await this.convertMp4ToMp3(paths);
+      fs.unlinkSync(paths.filePath);
+      await (() => {
+        return new Promise((resolve, reject) => {
+          setTimeout(()=>{
+            this.setState({progress: 100});
+            resolve();
+          },900);
+        });
+      });
     } catch(e) {
       console.error(e);
     }
@@ -63,26 +106,12 @@ class AppContainer extends Component {
       showProgressBar: true,
       progressMessage: 'Where do you want to store the mp3?',
     });
-
     try {
-      let d = remote.dialog.showOpenDialog({properties: ['openDirectory'], title: 'Select folder to store file.'});
-      if(d) {
-        let pathForFile = d[0];
-        await this.convertVideoToMp3(id, pathForFile);
+        await this.convertVideoToMp3(id, this.state.userDownloadsFolder);
         this.downloadFinished();
-      }
     } catch(e) {
       console.error(e);
     }
-
-    // this.fetchVideo(id);
-  }
-
-  retryDownload(id) {
-    setTimeout(
-      () => this.fetchVideo(id),
-      5000
-    );
   }
 
   downloadFinished() {
@@ -90,7 +119,6 @@ class AppContainer extends Component {
       progress: 100,
       progressMessage: 'Conversion successful! Resetting in 5 seconds.'
     });
-
     // Reset the progress bar to the LinkInput
     setTimeout(() => this.setState({
       showProgressBar: false
