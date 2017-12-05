@@ -26,7 +26,7 @@ class AppContainer extends Component {
   getVideoAndConvert(urlLink, userProvidedPath, title){
     this.setState({progressMessage: 'Downloading and converting...'});
     return new Promise((resolve, reject) => {
-      let fullPath = path.join(userProvidedPath, `${title}.mp3`);
+      let fullPath = path.join(userProvidedPath, `${title}.mp4`);
       let videoObject = ytdl(urlLink, {filter: 'audioonly'});
 
       videoObject
