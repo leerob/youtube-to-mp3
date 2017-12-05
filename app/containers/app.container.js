@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
-import Axios from 'axios';
 import LinkInput from '../components/LinkInput';
 import ProgressBar from '../components/ProgressBar';
 
-const {ipcRenderer} = window.require('electron');
+const ytdl = window.require('ytdl-core');
+const fs = window.require('fs');
+import * as path from "path";
+
+const {remote} = window.require('electron');
 
 class AppContainer extends Component {
   constructor(props) {
@@ -11,49 +14,70 @@ class AppContainer extends Component {
     this.state = {
       showProgressBar: false,
       progress: 0,
-      progressMessage: 'Sending request..',
+      progressMessage: '',
     };
 
-    this.interval = null;
-    this.api_key = 'yt-mp3.com';
-    this.fetchVideo = this.fetchVideo.bind(this);
+    this.rateLimitTrigged = false;
     this.startDownload = this.startDownload.bind(this);
-    this.updateProgress = this.updateProgress.bind(this);
     this.retryDownload = this.retryDownload.bind(this);
     this.downloadFinished = this.downloadFinished.bind(this);
   }
 
-  startDownload(id) {
+  getVideoAndConvert(urlLink, userProvidedPath, title){
+    this.setState({progressMessage: 'Downloading and converting...'});
+    return new Promise((resolve, reject) => {
+      let fullPath = path.join(userProvidedPath, `${title}.mp3`);
+      let videoObject = ytdl(urlLink, {filter: 'audioonly'});
+
+      videoObject
+        .on('progress', (chunkLength, downloaded, total) => {
+          if(!this.rateLimitTrigged) {
+            let newval = Math.floor((downloaded / total) * 100).toString();
+            this.setState({progress: newval});
+            this.rateLimitTrigged = true;
+            setTimeout(()=>{this.rateLimitTrigged = false}, 800);
+          }
+        });
+
+      videoObject
+        .pipe(fs.createWriteStream(fullPath))
+        .on('finish', () => {
+          resolve();
+        });
+    });
+  }
+
+  async ConvertVideoToMp3(urlLink, userProvidedPath) {
+    try{
+      this.setState({progressMessage: 'Fetching video info...'});
+      let info = await ytdl.getInfo(urlLink);
+      await this.getVideoAndConvert(urlLink, userProvidedPath, info.title);
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  async startDownload(id) {
     this.setState({
       progress: 0,
       showProgressBar: true,
-      progressMessage: 'Sending request...',
+      progressMessage: 'Where do you want to store the mp3?',
     });
-    this.fetchVideo(id);
-  }
 
-  fetchVideo(id) {
-    let _this = this;
-    Axios.get(`http://www.yt-mp3.com/fetch?v=${id}&apikey=${this.api_key}`).then(function (response) {
-      if (response.data.status.localeCompare('timeout') === 0) {
-        _this.setState({progressMessage: 'Waiting on yt-mp3 worker...'});
-        _this.retryDownload(id);
-      } else if (response.data.url) {
-        _this.updateProgress(100);
-        _this.setState({progressMessage: 'Conversion complete!'});
-        _this.downloadFinished(response.data.url);
-      } else {
-        _this.setState({progressMessage: 'Converting video...'});
-        _this.updateProgress(response.data.progress);
-        _this.retryDownload(id);
+    try {
+      let d = remote.dialog.showOpenDialog({properties: ['openDirectory'], title: 'Select folder to store file.'});
+      if(d) {
+        let pathForFile = d[0];
+        await this.ConvertVideoToMp3(id, pathForFile);
+        this.downloadFinished();
       }
-    }).catch((e) => {
+    } catch(e) {
       console.error(e);
-      alert('There was an error retrieving the video. Please restart the application.');
-    });
+    }
+
+    // this.fetchVideo(id);
   }
 
-  // The video has been placed in a queue, retry in 5 seconds
   retryDownload(id) {
     setTimeout(
       () => this.fetchVideo(id),
@@ -61,29 +85,16 @@ class AppContainer extends Component {
     );
   }
 
-  downloadFinished(url) {
+  downloadFinished() {
     this.setState({
-      progress: 100
+      progress: 100,
+      progressMessage: 'Conversion successful! Resetting in 5 seconds.'
     });
-
-    // Prompt the user to save the file
-    ipcRenderer.send('download-file', url);
-
-    // Clear the progress bar incrementation
-    clearInterval(this.interval);
 
     // Reset the progress bar to the LinkInput
     setTimeout(() => this.setState({
       showProgressBar: false
-    }), 1000);
-  }
-
-  updateProgress(progress) {
-    if (this.state.progress <= 100) {
-      this.setState({
-        progress: Math.floor(progress)
-      });
-    }
+    }), 6000);
   }
 
   render() {

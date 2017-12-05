@@ -1,7 +1,7 @@
 {
   "name": "youtube-to-mp3",
   "productName": "YouTube To MP3",
-  "version": "1.2.1",
+  "version": "2.0.1",
   "description": "Electron application to convert and download YouTube videos as MP3s",
   "author": "Lee Robinson",
   "license": "MIT",
@@ -25,14 +25,14 @@
     "mp3"
   ],
   "dependencies": {
-    "axios": "^0.9.1",
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-react": "^6.5.0",
     "babelify": "^7.2.0",
     "electron-is-dev": "^0.3.0",
     "electron-reload": "^1.2.2",
     "react": "^0.14.8",
-    "react-dom": "^0.14.7"
+    "react-dom": "^0.14.7",
+    "ytdl-core": "^0.18.3"
   },
   "devDependencies": {
     "electron-packager": "^9.1.0",
