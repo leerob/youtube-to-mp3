@@ -4,7 +4,7 @@ import ProgressBar from '../components/ProgressBar';
 
 const ytdl = window.require('ytdl-core');
 const fs = window.require('fs');
-import * as path from "path";
+import * as path from 'path';
 
 const {remote} = window.require('electron');
 
@@ -32,8 +32,8 @@ class AppContainer extends Component {
       videoObject
         .on('progress', (chunkLength, downloaded, total) => {
           if(!this.rateLimitTrigged) {
-            let newval = Math.floor((downloaded / total) * 100).toString();
-            this.setState({progress: newval});
+            let newVal = Math.floor((downloaded / total) * 100).toString();
+            this.setState({progress: newVal});
             this.rateLimitTrigged = true;
             setTimeout(()=>{this.rateLimitTrigged = false}, 800);
           }
@@ -47,7 +47,7 @@ class AppContainer extends Component {
     });
   }
 
-  async ConvertVideoToMp3(urlLink, userProvidedPath) {
+  async convertVideoToMp3(urlLink, userProvidedPath) {
     try{
       this.setState({progressMessage: 'Fetching video info...'});
       let info = await ytdl.getInfo(urlLink);
@@ -68,7 +68,7 @@ class AppContainer extends Component {
       let d = remote.dialog.showOpenDialog({properties: ['openDirectory'], title: 'Select folder to store file.'});
       if(d) {
         let pathForFile = d[0];
-        await this.ConvertVideoToMp3(id, pathForFile);
+        await this.convertVideoToMp3(id, pathForFile);
         this.downloadFinished();
       }
     } catch(e) {
