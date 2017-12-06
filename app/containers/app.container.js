@@ -158,12 +158,15 @@ class AppContainer extends Component {
   }
 
   changeOutputFolder() {
+    // Create an electron open dialog for selecting folders, this will take into account platform
     let fileSelector = remote.dialog.showOpenDialog({properties: ['openDirectory'], title: 'Select folder to store files.'});
+
+    // If a folder was selected and not just closed, set the localStorage value to that path and adjust the state.
     if(fileSelector) {
       let pathToStore = fileSelector[0];
       localStorage.setItem('userSelectedFolder', pathToStore);
+      this.setState({userDownloadsFolder: pathToStore});
     }
-    this.setState({userDownloadsFolder: localStorage.getItem('userSelectedFolder') ? localStorage.getItem('userSelectedFolder') : remote.app.getPath('downloads')});
   }
 
   render() {
