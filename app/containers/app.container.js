@@ -1,15 +1,12 @@
 import React, {Component} from 'react';
 import LinkInput from '../components/LinkInput';
 import ProgressBar from '../components/ProgressBar';
-
 const ytdl = window.require('ytdl-core');
 const fs = window.require('fs-extra');
 import * as path from 'path';
-
 const ffmpeg = window.require('fluent-ffmpeg');
 const binaries = window.require('ffmpeg-binaries');
 const sanitize = window.require('sanitize-filename');
-
 const {remote} = window.require('electron');
 
 class AppContainer extends Component {
@@ -19,14 +16,17 @@ class AppContainer extends Component {
       showProgressBar: false,
       progress: 0,
       progressMessage: '',
-      userDownloadsFolder: remote.app.getPath('downloads'),
+      userDownloadsFolder: localStorage.getItem('userSelectedFolder') ? localStorage.getItem('userSelectedFolder') : remote.app.getPath('downloads'),
     };
+
+    console.log();
 
     // This property will be used to control the rate at which the progress bar is updated to prevent UI lag.
     this.rateLimitTriggered = false;
 
     this.startDownload = this.startDownload.bind(this);
     this.downloadFinished = this.downloadFinished.bind(this);
+    this.changeOutputFolder = this.changeOutputFolder.bind(this);
   }
 
   getVideoAsMp4(urlLink, userProvidedPath, title) {
@@ -157,11 +157,22 @@ class AppContainer extends Component {
     }), 6000);
   }
 
+  changeOutputFolder() {
+    let fileSelector = remote.dialog.showOpenDialog({properties: ['openDirectory'], title: 'Select folder to store files.'});
+    if(fileSelector) {
+      let pathToStore = fileSelector[0];
+      localStorage.setItem('userSelectedFolder', pathToStore);
+    }
+    this.setState({userDownloadsFolder: localStorage.getItem('userSelectedFolder') ? localStorage.getItem('userSelectedFolder') : remote.app.getPath('downloads')});
+  }
+
   render() {
     if (this.state.showProgressBar) {
       return (
         <div>
-          <div className="outputFolderDisplay"><span>Current output folder:&nbsp;</span>{this.state.userDownloadsFolder}
+          <div className="outputFolderDisplay">
+            <a href='#' onClick={this.changeOutputFolder}>Change</a>
+            <span>&nbsp;&nbsp;Current output folder:&nbsp;</span>{this.state.userDownloadsFolder}
           </div>
           <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage}/>
         </div>
@@ -169,7 +180,9 @@ class AppContainer extends Component {
     } else {
       return (
         <div>
-          <div className="outputFolderDisplay"><span>Current output folder:&nbsp;</span>{this.state.userDownloadsFolder}
+          <div className="outputFolderDisplay">
+            <a href='#' onClick={this.changeOutputFolder}>Change</a>
+            <span>&nbsp;&nbsp;Current output folder:&nbsp;</span>{this.state.userDownloadsFolder}
           </div>
           <LinkInput startDownload={this.startDownload}/>
         </div>
