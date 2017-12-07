@@ -4,6 +4,7 @@ import ProgressBar from '../components/ProgressBar';
 const ytdl = window.require('ytdl-core');
 const fs = window.require('fs-extra');
 import * as path from 'path';
+import OutputPath from "../components/OutputPath";
 const ffmpeg = window.require('fluent-ffmpeg');
 const binaries = window.require('ffmpeg-binaries');
 const sanitize = window.require('sanitize-filename');
@@ -75,7 +76,7 @@ class AppContainer extends Component {
     this.setState({progressMessage: 'Converting...', progress: 0});
 
     return new Promise((resolve, reject) => {
-      // reset the rate limiting trigger just encase.
+      // Reset the rate limiting trigger just encase.
       this.rateLimitTriggered = false;
 
       // Pass ffmpeg the temp mp4 file. Set the path where is ffmpeg binary for the platform. Provided desired format.
@@ -158,11 +159,11 @@ class AppContainer extends Component {
   }
 
   changeOutputFolder() {
-    // Create an electron open dialog for selecting folders, this will take into account platform
+    // Create an electron open dialog for selecting folders, this will take into account platform.
     let fileSelector = remote.dialog.showOpenDialog({properties: ['openDirectory'], title: 'Select folder to store files.'});
 
     // If a folder was selected and not just closed, set the localStorage value to that path and adjust the state.
-    if(fileSelector) {
+    if (fileSelector) {
       let pathToStore = fileSelector[0];
       localStorage.setItem('userSelectedFolder', pathToStore);
       this.setState({userDownloadsFolder: pathToStore});
@@ -173,21 +174,15 @@ class AppContainer extends Component {
     if (this.state.showProgressBar) {
       return (
         <div>
-          <div className="outputFolderDisplay">
-            <a href='#' onClick={this.changeOutputFolder}>Change</a>
-            <span>&nbsp;&nbsp;Current output folder:&nbsp;</span>{this.state.userDownloadsFolder}
-          </div>
           <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage}/>
+          <OutputPath changeLocation={this.changeOutputFolder} userSelectedFolder={this.state.userDownloadsFolder}/>
         </div>
       );
     } else {
       return (
         <div>
-          <div className="outputFolderDisplay">
-            <a href='#' onClick={this.changeOutputFolder}>Change</a>
-            <span>&nbsp;&nbsp;Current output folder:&nbsp;</span>{this.state.userDownloadsFolder}
-          </div>
           <LinkInput startDownload={this.startDownload}/>
+          <OutputPath changeLocation={this.changeOutputFolder} userSelectedFolder={this.state.userDownloadsFolder}/>
         </div>
       );
     }

@@ -96,10 +96,22 @@ body {
   }
 }
 
-.outputFolderDisplay {
-  span {
-    font-weight: bold;
-    font-style: normal;
+.output_folder_display {
+  a {
+    color: rgba(50,80,150,0.6);
+    cursor: pointer;
   }
-  font-style: italic;
+
+  span {
+    &:first-child {
+      font-weight: bold;
+      font-style: normal;
+      padding-left: 10px;
+    }
+
+    &:last-child {
+      font-style: italic;
+      font-weight: normal;
+    }
+  }
 }

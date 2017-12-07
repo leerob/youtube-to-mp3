@@ -72,7 +72,7 @@ body {
   font-weight: 200;
   cursor: pointer; }
 
-.outputFolderDisplay {
+.output_folder_display {
   position: absolute;
   left: 3px;
   bottom: 1px;
@@ -80,12 +80,18 @@ body {
   color: rgba(55,55,55,0.7)
 }
 
-.outputFolderDisplay span:last-child{
+.output_folder_display span:last-child{
   font-style: italic;
   font-weight: normal;
 }
 
-.outputFolderDisplay span:first-child {
+.output_folder_display span:first-child {
   font-weight: bold;
   font-style: normal;
+  padding-left: 10px;
+}
+
+.output_folder_display a {
+  color: rgba(50,80,150,0.6);
+  cursor: pointer;
 }
