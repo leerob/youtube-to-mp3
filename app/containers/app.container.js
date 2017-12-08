@@ -89,6 +89,7 @@ class AppContainer extends Component {
       ffmpeg(paths.filePath)
         .setFfmpegPath(binaries.ffmpegPath())
         .format('mp3')
+        .audioBitrate(160)
         .on('progress', (progress) => {
           // Use same rate limiting as above in function "getVideoAsMp4()" to prevent UI lag.
           if (!this.rateLimitTriggered) {
