@@ -1,14 +1,16 @@
-import React, {Component} from 'react';
 import LinkInput from '../components/LinkInput';
 import ProgressBar from '../components/ProgressBar';
-const ytdl = window.require('ytdl-core');
-const fs = window.require('fs-extra');
+
+import React, {Component} from 'react';
+
 import * as path from 'path';
-import OutputPath from "../components/OutputPath";
+
 const ffmpeg = window.require('fluent-ffmpeg');
 const binaries = window.require('ffmpeg-binaries');
 const sanitize = window.require('sanitize-filename');
-const {remote} = window.require('electron');
+const {ipcRenderer, remote} = window.require('electron');
+const ytdl = window.require('ytdl-core');
+const fs = window.require('fs-extra');
 
 class AppContainer extends Component {
   constructor(props) {
@@ -20,7 +22,11 @@ class AppContainer extends Component {
       userDownloadsFolder: localStorage.getItem('userSelectedFolder') ? localStorage.getItem('userSelectedFolder') : remote.app.getPath('downloads'),
     };
 
-    console.log();
+    // Signal from main process to show prompt to change the download to folder.
+    ipcRenderer.on('promptForChangeDownloadFolder', () => {
+      // Changing the folder in renderer because we need access to both state and local storage.
+      this.changeOutputFolder();
+    });
 
     // This property will be used to control the rate at which the progress bar is updated to prevent UI lag.
     this.rateLimitTriggered = false;
@@ -149,13 +155,13 @@ class AppContainer extends Component {
     // Make sure progress bar is at 100% and tell the user we have completed the task successfully.
     this.setState({
       progress: 100,
-      progressMessage: 'Conversion successful! Resetting in 5 seconds.'
+      progressMessage: 'Conversion successful!'
     });
 
     // Reset the progress bar to the LinkInput
     setTimeout(() => this.setState({
       showProgressBar: false
-    }), 6000);
+    }), 2000);
   }
 
   changeOutputFolder() {
@@ -167,24 +173,15 @@ class AppContainer extends Component {
       let pathToStore = fileSelector[0];
       localStorage.setItem('userSelectedFolder', pathToStore);
       this.setState({userDownloadsFolder: pathToStore});
+      console.log(`New current path ${localStorage.getItem('userSelectedFolder')}`)
     }
   }
 
   render() {
     if (this.state.showProgressBar) {
-      return (
-        <div>
-          <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage}/>
-          <OutputPath changeLocation={this.changeOutputFolder} userSelectedFolder={this.state.userDownloadsFolder}/>
-        </div>
-      );
+      return <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage}/>;
     } else {
-      return (
-        <div>
-          <LinkInput startDownload={this.startDownload}/>
-          <OutputPath changeLocation={this.changeOutputFolder} userSelectedFolder={this.state.userDownloadsFolder}/>
-        </div>
-      );
+      return <LinkInput startDownload={this.startDownload}/>;
     }
   }
 }

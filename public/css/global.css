@@ -71,27 +71,3 @@ body {
   margin-top: 10px;
   font-weight: 200;
   cursor: pointer; }
-
-.output_folder_display {
-  position: absolute;
-  left: 3px;
-  bottom: 1px;
-  font-size: 10pt;
-  color: rgba(55,55,55,0.7)
-}
-
-.output_folder_display span:last-child{
-  font-style: italic;
-  font-weight: normal;
-}
-
-.output_folder_display span:first-child {
-  font-weight: bold;
-  font-style: normal;
-  padding-left: 10px;
-}
-
-.output_folder_display a {
-  color: rgba(50,80,150,0.6);
-  cursor: pointer;
-}
