@@ -166,7 +166,7 @@ class AppContainer extends Component {
 
   changeOutputFolder() {
     // Create an electron open dialog for selecting folders, this will take into account platform.
-    let fileSelector = remote.dialog.showOpenDialog({properties: ['openDirectory'], title: 'Select folder to store files.'});
+    let fileSelector = remote.dialog.showOpenDialog({defaultPath: `${this.state.userDownloadsFolder}`, properties: ['openDirectory'], title: 'Select folder to store files.'});
 
     // If a folder was selected and not just closed, set the localStorage value to that path and adjust the state.
     if (fileSelector) {
