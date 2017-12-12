@@ -48,8 +48,10 @@ body {
         font-weight: 200;
         transition: color .4s ease-in-out;
         position: absolute;
+        text-align: right;
+        width: 80px;
         top: calc(50% - 42px);
-        left: calc(50% + 195px);
+        left: calc(50% + 165px);
     }
     &__info {
         height: 50px;

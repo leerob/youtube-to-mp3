@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, Menu} = require('electron');
+const {app, BrowserWindow, Menu} = require('electron');
 const isDevMode = require('electron-is-dev');
 const path = require('path');
 
@@ -40,9 +40,18 @@ function createWindow() {
       {label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:"},
       {label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:"}
     ]
-  }];
+  }, {
+    label: "Preferences",
+    submenu: [
+      {label: "Download Folder", click: () => {
+        mainWindow.webContents.send('promptForChangeDownloadFolder');
+      }}
+    ]
+  }
+  ];
+
   // If developing add dev menu option to menu bar
-  if (isDevMode)
+  if (isDevMode) {
     template.push({
       label: 'Dev Options',
       submenu: [
@@ -53,6 +62,7 @@ function createWindow() {
         }
       ]
     });
+  }
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
@@ -73,8 +83,4 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow();
   }
-});
-
-ipcMain.on('download-file', function (e, url) {
-  mainWindow.loadURL('http:' + url);
 });
