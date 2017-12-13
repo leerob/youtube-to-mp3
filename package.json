@@ -37,6 +37,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "sanitize-filename": "^1.6.1",
+    "smalltalk": "^2.5.1",
     "ytdl-core": "^0.18.3"
   },
   "devDependencies": {
