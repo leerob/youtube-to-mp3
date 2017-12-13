@@ -4,6 +4,8 @@ import ProgressBar from '../components/ProgressBar';
 import React, {Component} from 'react';
 
 import * as path from 'path';
+import TabControl from "../components/TabControl";
+import smalltalk from 'smalltalk/legacy';
 
 const ffmpeg = window.require('fluent-ffmpeg');
 const binaries = window.require('ffmpeg-binaries');
@@ -16,10 +18,14 @@ class AppContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      inputTabSelected: true,
       showProgressBar: false,
       progress: 0,
-      progressMessage: '',
+      bitrate: localStorage.getItem('userBitrate') ? parseInt(localStorage.getItem('userBitrate')) : 160,
+      progressMessage: 'No items in queue',
       userDownloadsFolder: localStorage.getItem('userSelectedFolder') ? localStorage.getItem('userSelectedFolder') : remote.app.getPath('downloads'),
+      workingOnVideo: false,
+      downloadQueue: [],
     };
 
     // Signal from main process to show prompt to change the download to folder.
@@ -28,11 +34,33 @@ class AppContainer extends Component {
       this.changeOutputFolder();
     });
 
+    ipcRenderer.on('changeBitrate', () => {
+      smalltalk.prompt('Bitrate Setting', '', this.state.bitrate.toString())
+        .then((value) => {
+          if(value.match(/[0-9]/g) !== null) {
+            let valAsInt = parseInt(value);
+            if(valAsInt >= 64 && valAsInt <= 192) {
+              this.setState({bitrate: valAsInt});
+              localStorage.setItem('userBitrate', valAsInt.toString());
+            } else {
+              smalltalk.alert('Error', 'Bitrate must be a valid number between 64 and 192');
+            }
+          } else {
+            smalltalk.alert('Error', 'Bitrate must be a valid number between 64 and 192');
+          }
+        })
+        .catch(() => {
+          console.log('User canceled bitrate prompt');
+        });
+    });
+
     // This property will be used to control the rate at which the progress bar is updated to prevent UI lag.
     this.rateLimitTriggered = false;
 
+    this.swapTab = this.swapTab.bind(this);
     this.startDownload = this.startDownload.bind(this);
     this.downloadFinished = this.downloadFinished.bind(this);
+    this.addDownloadToQueue = this.addDownloadToQueue.bind(this);
     this.changeOutputFolder = this.changeOutputFolder.bind(this);
   }
 
@@ -89,7 +117,7 @@ class AppContainer extends Component {
       ffmpeg(paths.filePath)
         .setFfmpegPath(binaries.ffmpegPath())
         .format('mp3')
-        .audioBitrate(160)
+        .audioBitrate(this.state.bitrate)
         .on('progress', (progress) => {
           // Use same rate limiting as above in function "getVideoAsMp4()" to prevent UI lag.
           if (!this.rateLimitTriggered) {
@@ -116,6 +144,7 @@ class AppContainer extends Component {
       progress: 0,
       showProgressBar: true,
       progressMessage: '...',
+      workingOnVideo: true,
     });
 
     try {
@@ -159,10 +188,40 @@ class AppContainer extends Component {
       progressMessage: 'Conversion successful!'
     });
 
-    // Reset the progress bar to the LinkInput
-    setTimeout(() => this.setState({
-      showProgressBar: false
-    }), 2000);
+    let currentQueue = [...this.state.downloadQueue];
+    currentQueue.pop();
+
+    this.setState({
+      workingOnVideo: false,
+      downloadQueue: [...currentQueue]
+    });
+
+    if(this.state.downloadQueue.length > 0) {
+      setTimeout(() => {
+        this.startDownload(this.state.downloadQueue[0]);
+      }, 2000);
+    } else {
+      setTimeout(() => {
+        this.setState({
+          progress: 0,
+          progressMessage: 'No items in queue',
+        });
+      }, 2000);
+    }
+
+  }
+
+  addDownloadToQueue(id) {
+    // test url:    https://www.youtube.com/watch?v=Ssvu2yncgWU
+    let currentQueue = [...this.state.downloadQueue];
+    currentQueue.push(id);
+    this.setState({downloadQueue: [...currentQueue]});
+
+    if(this.state.downloadQueue.length > 0 && !this.state.workingOnVideo) {
+      setTimeout(() => {
+        this.startDownload(this.state.downloadQueue[0]);
+      }, 2000);
+    }
   }
 
   changeOutputFolder() {
@@ -178,12 +237,27 @@ class AppContainer extends Component {
     }
   }
 
+  swapTab(isInputTab) {
+    this.setState({inputTabSelected: isInputTab});
+  }
+
   render() {
-    if (this.state.showProgressBar) {
-      return <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage}/>;
+    if (!this.state.inputTabSelected) {
+      return (
+        <div>
+          <TabControl tabSwap={this.swapTab} selecedTab={this.state.inputTabSelected} queueQty={this.state.downloadQueue.length}/>
+          <ProgressBar progress={this.state.progress} messageText={this.state.progressMessage} />
+        </div>
+      );
     } else {
-      return <LinkInput startDownload={this.startDownload}/>;
+      return (
+        <div>
+          <TabControl tabSwap={this.swapTab} selecedTab={this.state.inputTabSelected} queueQty={this.state.downloadQueue.length} />
+          <LinkInput startDownload={this.addDownloadToQueue} />
+        </div>
+      );
     }
+
   }
 }
 

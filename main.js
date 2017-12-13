@@ -3,7 +3,7 @@ const isDevMode = require('electron-is-dev');
 const path = require('path');
 
 if (isDevMode) {
-  require('electron-reload')(__dirname + '/public');
+  require('electron-reload')(__dirname + '/app');
 }
 
 let mainWindow;
@@ -17,7 +17,7 @@ function createWindow() {
   };
 
   mainWindow = new BrowserWindow(browserOptions);
-  mainWindow.loadURL('file://' + __dirname + '/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/app/index.html');
 
   let template = [{
     label: "YouTube To MP3",
@@ -43,8 +43,11 @@ function createWindow() {
   }, {
     label: "Preferences",
     submenu: [
-      {label: "Download Folder", click: () => {
+      {label: "Change Download Folder", click: () => {
         mainWindow.webContents.send('promptForChangeDownloadFolder');
+      }},
+      {label: "Change Bitrate", click: () => {
+        mainWindow.webContents.send('changeBitrate');
       }}
     ]
   }
