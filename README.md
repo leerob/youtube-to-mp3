@@ -22,13 +22,13 @@ YouTube To MP3 is a desktop application for converting and downloading YouTube v
  - [ ] Downloading videos as well as MP3s
  - [ ] Multiple downloads at a time
  - [ ] Different bitrate and format options
- - [ ] Test on other operating systems
- - [ ] Support downloading long videos (> 1 hour)
+ - [x] Test on other operating systems
+ - [x] Support downloading long videos (> 1 hour)
 
 
 ### Download
 
-To download for Mac, [click here](https://files.fm/u/8pyyfrpc).
+To download for Mac, [click here](https://files.fm/u/488qqwca).
 
 ### Running Locally
 
