@@ -27,14 +27,13 @@ body {
 .center {
     display: flex;
     justify-content: center;
-    min-height: 60px;
 }
 
 .progress {
     width: 510px;
     box-shadow: $shadow;
     background-color: white;
-    height: 62px;
+    height: 60px;
     border-radius: 10px;
 
     &__bar {
@@ -51,7 +50,7 @@ body {
         position: absolute;
         text-align: right;
         width: 80px;
-        top: calc(50% - 16px);
+        top: calc(50% - 42px);
         left: calc(50% + 165px);
     }
     &__info {
@@ -94,34 +93,5 @@ body {
       margin-top: 10px;
       font-weight: 200;
       cursor: pointer;
-  }
-}
-
-.tabs {
-  width: 510px;
-  margin-bottom: 8px;
-
-  .tab {
-    display: inline-block;
-    text-align: center;
-    padding: 15px 0 4px 0;
-    width: 50%;
-    border-bottom: 3px solid transparent;
-    color: rgba(80,80,80,0.7);
-    font-size: 16pt;
-    font-weight: bold;
-    cursor: pointer !important;
-
-    &.active {
-      border-bottom: 3px solid rgba(250,127,195,0.7) !important;
-    }
-
-    .badge {
-      padding: 3px 6px;
-      font-size: 12pt;
-      border-radius: 5px;
-      background-color: rgba(250,127,195,0.7);
-      color: #fff;
-    }
   }
 }
