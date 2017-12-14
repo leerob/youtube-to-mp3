@@ -17,7 +17,7 @@ function createWindow() {
   };
 
   mainWindow = new BrowserWindow(browserOptions);
-  mainWindow.loadURL('file://' + __dirname + '/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/app/index.html');
 
   let template = [{
     label: "YouTube To MP3",
@@ -42,10 +42,21 @@ function createWindow() {
     ]
   }, {
     label: "Preferences",
-    submenu: [
-      {label: "Download Folder", click: () => {
-        mainWindow.webContents.send('promptForChangeDownloadFolder');
-      }}
+    submenu: [{
+        label: "Download Folder",
+        click: () => {
+          mainWindow.webContents.send('promptForChangeDownloadFolder');
+        }
+      },
+      {
+        label: "Change Bitrate",
+        submenu: [
+          {label: '192 (Full Quality)', click: () => {mainWindow.webContents.send('changeBitrate', 192)}},
+          {label: '160 (CD Quality)', click: () => {mainWindow.webContents.send('changeBitrate', 160)}},
+          {label: '130 (Radio Quality)', click: () => {mainWindow.webContents.send('changeBitrate', 130)}},
+          {label: '65 (Minimal Quality)', click: () => {mainWindow.webContents.send('changeBitrate', 65)}},
+        ]
+      }
     ]
   }
   ];

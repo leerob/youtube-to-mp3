@@ -18,9 +18,17 @@ class AppContainer extends Component {
     this.state = {
       showProgressBar: false,
       progress: 0,
+      bitrate: localStorage.getItem('userBitrate') ? parseInt(localStorage.getItem('userBitrate')) : 160,
       progressMessage: '',
       userDownloadsFolder: localStorage.getItem('userSelectedFolder') ? localStorage.getItem('userSelectedFolder') : remote.app.getPath('downloads'),
     };
+
+    //Sample Url:  https://www.youtube.com/watch?v=Ssvu2yncgWU
+
+    ipcRenderer.on('changeBitrate', (event, newBitrate) => {
+      this.setState({bitrate: newBitrate});
+      localStorage.setItem('userBitrate', newBitrate.toString());
+    });
 
     // Signal from main process to show prompt to change the download to folder.
     ipcRenderer.on('promptForChangeDownloadFolder', () => {
@@ -89,7 +97,7 @@ class AppContainer extends Component {
       ffmpeg(paths.filePath)
         .setFfmpegPath(binaries.ffmpegPath())
         .format('mp3')
-        .audioBitrate(160)
+        .audioBitrate(this.state.bitrate)
         .on('progress', (progress) => {
           // Use same rate limiting as above in function "getVideoAsMp4()" to prevent UI lag.
           if (!this.rateLimitTriggered) {
@@ -174,7 +182,6 @@ class AppContainer extends Component {
       let pathToStore = fileSelector[0];
       localStorage.setItem('userSelectedFolder', pathToStore);
       this.setState({userDownloadsFolder: pathToStore});
-      console.log(`New current path ${localStorage.getItem('userSelectedFolder')}`)
     }
   }
 
