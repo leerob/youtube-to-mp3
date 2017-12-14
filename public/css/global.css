@@ -1,0 +1,96 @@
+html {
+  height: 100%; }
+
+body {
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #80f9b7 0%, #9abdeb 100%); }
+
+.root {
+  height: 100%;
+  align-items: center; }
+
+.center {
+  display: flex;
+  justify-content: center;
+  min-height: 60px; }
+
+.progress {
+  width: 510px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  height: 62px;
+  border-radius: 10px; }
+  .progress__bar {
+    background-color: #fa7fc3;
+    display: inline-block;
+    height: 100%;
+    border-radius: 10px;
+    transition: width .4s ease-in-out; }
+  .progress__percentage {
+    font-size: 22px;
+    font-weight: 200;
+    transition: color .4s ease-in-out;
+    position: absolute;
+    text-align: right;
+    width: 80px;
+    top: calc(50% - 16px);
+    left: calc(50% + 165px); }
+  .progress__info {
+    height: 50px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 22px;
+    margin-top: 10px;
+    font-weight: 200; }
+
+.link__input, .link__input--error {
+  width: 510px;
+  height: 60px;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  color: #747373;
+  font-size: 22px;
+  text-indent: 15px;
+  font-weight: 200; }
+  .link__input--error {
+    box-shadow: 0 0 0 2pt rgba(255, 0, 0, 0.53); }
+
+.link__button {
+  height: 50px;
+  width: 200px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 0;
+  border-radius: 10px;
+  color: white;
+  font-size: 22px;
+  background: #fa7fc3;
+  margin-top: 10px;
+  font-weight: 200;
+  cursor: pointer; }
+
+.tabs {
+  width: 510px;
+  margin-bottom: 8px; }
+  .tabs .tab {
+    display: inline-block;
+    text-align: center;
+    padding: 15px 0 4px 0;
+    width: 50%;
+    border-bottom: 3px solid transparent;
+    color: rgba(80, 80, 80, 0.7);
+    font-size: 16pt;
+    font-weight: bold;
+    cursor: pointer !important; }
+    .tabs .tab.active {
+      border-bottom: 3px solid rgba(250, 127, 195, 0.7) !important; }
+    .tabs .tab .badge {
+      padding: 3px 6px;
+      font-size: 12pt;
+      border-radius: 5px;
+      background-color: rgba(250, 127, 195, 0.7);
+      color: #fff; }

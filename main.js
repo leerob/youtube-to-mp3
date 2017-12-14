@@ -3,7 +3,7 @@ const isDevMode = require('electron-is-dev');
 const path = require('path');
 
 if (isDevMode) {
-  require('electron-reload')(__dirname + '/app');
+  require('electron-reload')(__dirname + '/public');
 }
 
 let mainWindow;
@@ -17,7 +17,7 @@ function createWindow() {
   };
 
   mainWindow = new BrowserWindow(browserOptions);
-  mainWindow.loadURL('file://' + __dirname + '/app/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/index.html');
 
   let template = [{
     label: "YouTube To MP3",
