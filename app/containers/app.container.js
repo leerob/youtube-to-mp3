@@ -5,7 +5,6 @@ import React, {Component} from 'react';
 
 import * as path from 'path';
 import TabControl from "../components/TabControl";
-import smalltalk from 'smalltalk/legacy';
 
 const ffmpeg = window.require('fluent-ffmpeg');
 const binaries = window.require('ffmpeg-binaries');
@@ -21,7 +20,6 @@ class AppContainer extends Component {
       inputTabSelected: true,
       showProgressBar: false,
       progress: 0,
-      bitrate: localStorage.getItem('userBitrate') ? parseInt(localStorage.getItem('userBitrate')) : 160,
       progressMessage: 'No items in queue',
       userDownloadsFolder: localStorage.getItem('userSelectedFolder') ? localStorage.getItem('userSelectedFolder') : remote.app.getPath('downloads'),
       workingOnVideo: false,
@@ -32,26 +30,6 @@ class AppContainer extends Component {
     ipcRenderer.on('promptForChangeDownloadFolder', () => {
       // Changing the folder in renderer because we need access to both state and local storage.
       this.changeOutputFolder();
-    });
-
-    ipcRenderer.on('changeBitrate', () => {
-      smalltalk.prompt('Bitrate Setting', '', this.state.bitrate.toString())
-        .then((value) => {
-          if(value.match(/[0-9]/g) !== null) {
-            let valAsInt = parseInt(value);
-            if(valAsInt >= 64 && valAsInt <= 192) {
-              this.setState({bitrate: valAsInt});
-              localStorage.setItem('userBitrate', valAsInt.toString());
-            } else {
-              smalltalk.alert('Error', 'Bitrate must be a valid number between 64 and 192');
-            }
-          } else {
-            smalltalk.alert('Error', 'Bitrate must be a valid number between 64 and 192');
-          }
-        })
-        .catch(() => {
-          console.log('User canceled bitrate prompt');
-        });
     });
 
     // This property will be used to control the rate at which the progress bar is updated to prevent UI lag.
@@ -117,7 +95,7 @@ class AppContainer extends Component {
       ffmpeg(paths.filePath)
         .setFfmpegPath(binaries.ffmpegPath())
         .format('mp3')
-        .audioBitrate(this.state.bitrate)
+        .audioBitrate(160)
         .on('progress', (progress) => {
           // Use same rate limiting as above in function "getVideoAsMp4()" to prevent UI lag.
           if (!this.rateLimitTriggered) {

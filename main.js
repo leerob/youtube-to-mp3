@@ -43,11 +43,8 @@ function createWindow() {
   }, {
     label: "Preferences",
     submenu: [
-      {label: "Change Download Folder", click: () => {
+      {label: "Download Folder", click: () => {
         mainWindow.webContents.send('promptForChangeDownloadFolder');
-      }},
-      {label: "Change Bitrate", click: () => {
-        mainWindow.webContents.send('changeBitrate');
       }}
     ]
   }
