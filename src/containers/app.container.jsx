@@ -23,8 +23,6 @@ class AppContainer extends Component {
       userDownloadsFolder: localStorage.getItem('userSelectedFolder') ? localStorage.getItem('userSelectedFolder') : remote.app.getPath('downloads'),
     };
 
-    //Sample Url:  https://www.youtube.com/watch?v=Ssvu2yncgWU
-
     ipcRenderer.on('changeBitrate', (event, newBitrate) => {
       this.setState({bitrate: newBitrate});
       localStorage.setItem('userBitrate', newBitrate.toString());
