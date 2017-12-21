@@ -16,7 +16,7 @@ YouTube To MP3 is a desktop application for converting and downloading YouTube v
  - [Electron](https://github.com/electron/electron) - Cross platform framework for native platforms
  - [React](https://github.com/facebook/react) - UI framework
  - [Sass](https://github.com/sass/sass) - CSS with superpowers
- - [Webpack](https://webpack.js.org/) - A bundler for javascript and friends.
+ - [Webpack](https://webpack.js.org/) - A module bundler for JavaScript
 
 
 ### Future Ideas
