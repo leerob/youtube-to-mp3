@@ -5,4 +5,5 @@ build
 .env
 .idea
 npm-debug.log
-releases
+release-builds/
+app/

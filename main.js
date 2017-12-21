@@ -17,35 +17,47 @@ function createWindow() {
   };
 
   mainWindow = new BrowserWindow(browserOptions);
-  mainWindow.loadURL('file://' + __dirname + '/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/app/index.html');
 
   let template = [{
-    label: "YouTube To MP3",
+    label: 'YouTube To MP3',
     submenu: [
-      {label: "About Application", selector: "orderFrontStandardAboutPanel:"},
-      {type: "separator"},
+      {label: 'About Application', selector: 'orderFrontStandardAboutPanel:'},
+      {type: 'separator'},
       {
-        label: "Quit", accelerator: "Command+Q", click: function () {
+        label: 'Quit', accelerator: 'Command+Q', click: function () {
           app.quit();
         }
       }
     ]
   }, {
-    label: "Edit",
+    label: 'Edit',
     submenu: [
-      {label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:"},
-      {label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:"},
-      {type: "separator"},
-      {label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:"},
-      {label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:"},
-      {label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:"}
+      {label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:'},
+      {label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:'},
+      {type: 'separator'},
+      {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
+      {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
+      {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'}
     ]
   }, {
-    label: "Preferences",
-    submenu: [
-      {label: "Download Folder", click: () => {
-        mainWindow.webContents.send('promptForChangeDownloadFolder');
-      }}
+    label: 'Preferences',
+    submenu: [{
+        label: 'Download Folder',
+        click: () => {
+          mainWindow.webContents.send('promptForChangeDownloadFolder');
+        }
+      },
+      {
+        label: 'Change Bitrate',
+        submenu: [
+          {label: '320 (Full Quality)', click: () => {mainWindow.webContents.send('changeBitrate', 320)}},
+          {label: '192 (High Quality)', click: () => {mainWindow.webContents.send('changeBitrate', 192)}},
+          {label: '160 (CD Quality)', click: () => {mainWindow.webContents.send('changeBitrate', 160)}},
+          {label: '130 (Radio Quality)', click: () => {mainWindow.webContents.send('changeBitrate', 130)}},
+          {label: '65 (Minimal Quality)', click: () => {mainWindow.webContents.send('changeBitrate', 65)}},
+        ]
+      }
     ]
   }
   ];
