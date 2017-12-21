@@ -1,10 +1,10 @@
 <h1 align="center">
-  <a href="https://www.leejamesrobinson.com"><img src="https://raw.githubusercontent.com/leerob/youtube-to-mp3/master/public/img/logo.png" alt="Youtube To MP3" width="200"></a>
+  <a href="https://www.leejamesrobinson.com"><img src="https://i.imgur.com/xSdyCbS.png" alt="Youtube To MP3" width="200"></a>
   <br>
   YouTube To MP3
   <br>
   <br>
-  <a href="https://www.leejamesrobinson.com"><img src="https://raw.githubusercontent.com/leerob/youtube-to-mp3/master/public/img/example.gif" alt="Youtube To MP3" width="600"></a>
+  <a href="https://www.leejamesrobinson.com"><img src="https://i.imgur.com/kvxMMwp.gif" alt="Youtube To MP3" width="600"></a>
 </h1>
 
 ### About
