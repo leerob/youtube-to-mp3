@@ -38,6 +38,8 @@ git clone https://github.com/leerob/youtube-to-mp3.git
 cd youtube-to-mp3
 # Install dependencies
 npm install
+# Create app/ folder
+npm run webpack
 # Run the app
 npm start
 ```
