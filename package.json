@@ -33,7 +33,7 @@
     "react-dom": "^16.2.0",
     "sanitize-filename": "^1.6.1",
     "webpack": "^3.10.0",
-    "ytdl-core": "^0.18.3"
+    "ytdl-core": "^0.20.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
