@@ -1,10 +1,10 @@
 <h1 align="center">
-  <a href="https://www.leejamesrobinson.com"><img src="https://raw.githubusercontent.com/leerob/youtube-to-mp3/master/public/img/logo.png" alt="Youtube To MP3" width="200"></a>
+  <a href="https://www.leejamesrobinson.com"><img src="https://i.imgur.com/xSdyCbS.png" alt="Youtube To MP3" width="200"></a>
   <br>
   YouTube To MP3
   <br>
   <br>
-  <a href="https://www.leejamesrobinson.com"><img src="https://raw.githubusercontent.com/leerob/youtube-to-mp3/master/public/img/example.gif" alt="Youtube To MP3" width="600"></a>
+  <a href="https://www.leejamesrobinson.com"><img src="https://i.imgur.com/kvxMMwp.gif" alt="Youtube To MP3" width="600"></a>
 </h1>
 
 ### About
@@ -16,18 +16,16 @@ YouTube To MP3 is a desktop application for converting and downloading YouTube v
  - [Electron](https://github.com/electron/electron) - Cross platform framework for native platforms
  - [React](https://github.com/facebook/react) - UI framework
  - [Sass](https://github.com/sass/sass) - CSS with superpowers
+ - [Webpack](https://webpack.js.org/) - A module bundler for JavaScript
 
 
 ### Future Ideas
+ - [x] Different bitrate and format options
+ - [x] Test on other operating systems
+ - [x] Support downloading long videos (> 1 hour)
  - [ ] Downloading videos as well as MP3s
  - [ ] Multiple downloads at a time
- - [ ] Different bitrate and format options
- - [ ] Test on other operating systems
 
-
-### Download
-
-To download for Mac, [click here](https://nofile.io/f/R7AJwVfE6X8/youtube-to-mp3.zip).
 
 ### Running Locally
 
@@ -40,6 +38,12 @@ git clone https://github.com/leerob/youtube-to-mp3.git
 cd youtube-to-mp3
 # Install dependencies
 npm install
+# Create app/ folder
+npm run webpack
 # Run the app
 npm start
 ```
+
+### Disclaimer
+This program should only be used on non-copyrighted material.
+
