@@ -47,6 +47,7 @@ class AppContainer extends Component {
     getVideoAsMp4(urlLink, userProvidedPath, title) {
         // Tell the user we are starting to get the video.
         this.setState({progressMessage: 'Downloading...'});
+        title = sanitize(title);
         return new Promise((resolve, reject) => {
             let fullPath = path.join(userProvidedPath, `tmp_${title}.mp4`);
 
