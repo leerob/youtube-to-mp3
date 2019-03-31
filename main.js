@@ -37,6 +37,7 @@ function createWindow() {
         {
             label: 'Edit',
             submenu: [
+                {role: 'Reload', accelerator: 'CmdOrCtrl+R', selector: 'reload:'},
                 {label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:'},
                 {label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:'},
                 {type: 'separator'},
