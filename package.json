@@ -42,7 +42,7 @@
         "babel-preset-es2015": "^6.24.1",
         "babel-preset-react": "^6.24.1",
         "css-loader": "^2.0.1",
-        "electron": "^3.0.12",
+        "electron": "^7.2.4",
         "electron-packager": "^13.0.1",
         "html-webpack-plugin": "^3.2.0",
         "node-sass": "^4.7.2",
